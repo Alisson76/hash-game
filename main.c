@@ -25,36 +25,6 @@ static int validateInput (int l, int c, char m[4][4])
     return ret;
 }
 
-// Receives int line (l), int column (c) and char play (p, which can be x or o)
-/*
-static int play (int l, int c, char p, char m[3][3])
-{
-    printf(" _______\n");
-    printf("|       |\n");
-    for (int i=1; i < 4; i++) {
-        if (l == i) {
-            switch (c) {
-                case 1:
-                    printf("| %c| |  |\n", p);
-                    break;
-                case 2:
-                    printf("|  |%c|  |\n", p);
-                    break;
-                case 3:
-                    printf("|  | |%c |\n", p);
-                    break;
-            }
-        } else {
-            printf("|  | |  |\n");
-        }
-    }
-    printf("|_______|\n");
-    printf("\n\n");
-
-    return 0;
-}
-*/
-// Receives int line (l), int column (c) and char play (p, which can be x or o)
 static int play (char p, char m[4][4])
 {
     printf(" _______\n");
@@ -68,11 +38,87 @@ static int play (char p, char m[4][4])
     return 0;
 }
 
+// Endgame horizontal
+static int endgameH (char p, char m[4][4])
+{
+    int ret=1;
+
+    for (int i=1; i < 4; i++) {
+        ret = 1;
+        for (int j=1; j < 4; j++) {
+            if (m[i][j] != p) {
+                ret = 0;
+                break;
+            }
+        }
+        if (ret == 1) {
+            printf("Player %c Wins!!\n", p);
+            break;
+        }
+    }
+
+    return ret;
+}
+
+// Endgame vertical
+static int endgameV (char p, char m[4][4])
+{
+    int ret=1;
+
+    for (int i=1; i < 4; i++) {
+        ret = 1;
+        for (int j=1; j < 4; j++) {
+            if (m[j][i] != p) {
+                ret = 0;
+                break;
+            }
+        }
+        if (ret == 1) {
+            printf("Player %c Wins!!\n", p);
+            break;
+        }
+    }
+
+    return ret;
+}
+
+// Endgame diagonal left
+static int endgameDL (char p, char m[4][4])
+{
+    int ret=1;
+
+    for (int i=1; i < 4; i++) {
+        if (m[i][i] != p) {
+            ret = 0;
+        }
+    }
+
+    if (ret == 1)
+        printf("Player %c Wins!!\n", p);
+
+    return ret;
+}
+
+// Endgame diagonal right
+static int endgameDR (char p, char m[4][4])
+{
+    int ret=1;
+
+    if (m[1][3] != p || m[2][2] != p || m[3][1] != p)
+        ret = 0;
+
+    if (ret == 1)
+        printf("Player %c Wins!!\n", p);
+
+    return ret;
+}
+
 int main(int argc, char* argv[])
 {
     // line and column
     int l=0, c=0;
-    char m[4][4];
+    // matrix and player
+    char m[4][4], p='x';
     memset(&m, ' ', sizeof(m));
 
     int end=0;
@@ -87,7 +133,7 @@ int main(int argc, char* argv[])
     printf("\n\n");
 
     while(!end) {
-        printf("--> Player 1:\n");
+        printf("--> Player %c:\n", p);
 
         while (1) {
             printf("Line: ");
@@ -107,13 +153,18 @@ int main(int argc, char* argv[])
 
         }
 
-        m[l][c]='x';
+        m[l][c]=p;
 
-        play('x', m);
+        play(p, m);
 
-        //printf("--> Player 2:\n");
+        end = endgameH(p, m) || endgameV(p,m) || endgameDL(p,m) || endgameDR(p,m);
 
-        //play(l, c, 'O');
+        // Alternating player
+        if (p == 'x') {
+            p = 'O';
+        } else {
+            p = 'x';
+        }
     }
 
     return 0;
