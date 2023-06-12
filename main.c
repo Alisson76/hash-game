@@ -3,6 +3,8 @@
 #include <ctype.h>
 #include <string.h>
 
+#include "socket/socketServer.h"
+
 static int validateInput (int l, int c, char m[4][4])
 {
     int ret=0;
@@ -115,6 +117,7 @@ static int endgameDR (char p, char m[4][4])
 
 int main(int argc, char* argv[])
 {
+    socketServer();
     // line and column
     int l=0, c=0;
     // matrix and player
@@ -122,6 +125,7 @@ int main(int argc, char* argv[])
     memset(&m, ' ', sizeof(m));
 
     int end=0;
+    int online=1;
 
     // Drawing board
     printf(" _______\n");
@@ -137,18 +141,20 @@ int main(int argc, char* argv[])
 
         while (1) {
             printf("Line: ");
-            if (scanf("%d", &l) != 1) {
-                fprintf(stderr, "Input is not a number\n");
-                exit(EXIT_FAILURE);
-            }
-            printf("Column: ");
-            if (scanf("%d", &c) != 1) {
-                fprintf(stderr, "Input is not a number\n");
-                exit(EXIT_FAILURE);
-            }
+            if (online == 0) {
+                if (scanf("%d", &l) != 1) {
+                    fprintf(stderr, "Input is not a number\n");
+                    exit(EXIT_FAILURE);
+                }
+                printf("Column: ");
+                if (scanf("%d", &c) != 1) {
+                    fprintf(stderr, "Input is not a number\n");
+                    exit(EXIT_FAILURE);
+                }
 
-            if (validateInput(l, c, m) == 0) {
-                break;
+                if (validateInput(l, c, m) == 0) {
+                    break;
+                }
             }
 
         }

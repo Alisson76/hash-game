@@ -1,0 +1,10 @@
+Tutorial:
+https://www.thegeekstuff.com/2011/12/c-socket-programming/
+
+Server main functions, read their manual to more info:
+
+- socket, creates new socket
+- bind, bind an address to a socket
+- listen, makes the socket start listening for connecitons
+- accept, accept connection to a listening socket, by creating a new socket
+- write, send a message from standard input

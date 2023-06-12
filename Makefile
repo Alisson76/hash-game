@@ -1,7 +1,8 @@
 CFLAGS=-Wall
+all: hash
 
-hash: main.o
-	gcc -o hash main.o
+hash: main.o socket/socketServer.o
+	gcc -o hash main.o socket/socketServer.o
 
 clean:
-	rm hash *.o
+	rm hash *.o socket/*.o
